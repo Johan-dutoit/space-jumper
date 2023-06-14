@@ -1,0 +1,18 @@
+diff --git a/node_modules/@types/json-diff/index.d.ts b/node_modules/@types/json-diff/index.d.ts
+index c1f1ed0..fd9d0ef 100755
+--- a/node_modules/@types/json-diff/index.d.ts
++++ b/node_modules/@types/json-diff/index.d.ts
+@@ -23,5 +23,12 @@ export interface DiffStringOptions extends DiffOptions {
+     color?: boolean;
+ }
+ 
+-export function diff(obj1: unknown, obj2: unknown, options?: DiffOptions): any;
++export type DiffKind = ' ' | '-' | '+' | '~'
++export type DiffItem<T> = [DiffKind, T]
++
++export type DiffResponse<T> = {
++    items: DiffItem<T>[];
++}
++
++export function diff<T>(obj1: unknown, obj2: unknown, options?: DiffOptions): DiffResponse<T>;
+ export function diffString(obj1: unknown, obj2: unknown, options?: DiffStringOptions): string;
