@@ -1,15 +1,18 @@
 import { Space } from "contentful-management";
 import { diffString } from "json-diff";
-import { printLogo } from "./utils/display";
+import { printEnvironment, printKey, printLogo } from "./utils/display";
 import { envPicker } from "./utils/envPicker";
 import { actionPrompt } from "./utils/prompt";
 
 export const syncContentTypes = async (spaces: Space[]) => {
-  const [_sourceSpace, sourceEnvironment] = await envPicker(spaces, "source");
-  const [_targetSpace, targetEnvironment] = await envPicker(spaces, "target");
+  const [sourceSpace, sourceEnvironment] = await envPicker(spaces, "source");
+  const [targetSpace, targetEnvironment] = await envPicker(spaces, "target");
 
   const sourceTypes = await sourceEnvironment.getContentTypes();
   const targetTypes = await targetEnvironment.getContentTypes();
+
+  const sourceFullName = `${sourceSpace.name}.${sourceEnvironment.name}`;
+  const targetFullName = `${targetSpace.name}.${targetEnvironment.name}`;
 
   for (const sourceContentType of sourceTypes.items) {
     const targetContentType = targetTypes.items.find(
@@ -18,7 +21,7 @@ export const syncContentTypes = async (spaces: Space[]) => {
 
     if (targetContentType == null) {
       const shouldCreate = await actionPrompt(
-        `Create ${sourceContentType.sys.id} in ${targetEnvironment.name}?`,
+        `Create ${sourceContentType.sys.id} on ${targetFullName}?`,
         "Create"
       );
       if (!shouldCreate) {
@@ -43,11 +46,15 @@ export const syncContentTypes = async (spaces: Space[]) => {
         ({ id }) => id === sourceField.id
       );
 
+      const fieldFullName = `${sourceContentType.sys.id}.${sourceField.id}`;
+
       printLogo();
+      printEnvironment(sourceFullName, targetFullName);
+      printKey();
 
       if (targetField == null) {
         const shouldCreate = await actionPrompt(
-          `Create ${sourceField.id} in ${targetContentType.sys.id}?`,
+          `Create ${sourceContentType.sys.id}.${sourceField.id} on ${targetFullName}?`,
           "Create"
         );
         if (!shouldCreate) {
@@ -57,35 +64,35 @@ export const syncContentTypes = async (spaces: Space[]) => {
 
         targetContentType.fields.push(sourceField);
         continue;
-      } else {
-        const changes = diffString(targetField, sourceField);
-        if (!changes) {
-          continue;
-        }
-
-        console.log(`${targetField.id} changes\n${changes}`);
-
-        const shouldUpdate = await actionPrompt(
-          `Update ${targetField.id} in ${targetContentType.sys.id}?`,
-          "Update"
-        );
-
-        if (!shouldUpdate) {
-          continue;
-        }
-
-        changesMade = true;
-
-        targetField.disabled = sourceField.disabled;
-        targetField.items = sourceField.items;
-        targetField.linkType = sourceField.linkType;
-        targetField.localized = sourceField.localized;
-        targetField.name = sourceField.name;
-        targetField.omitted = sourceField.omitted;
-        targetField.required = sourceField.required;
-        targetField.type = sourceField.type;
-        targetField.validations = sourceField.validations;
       }
+
+      const differences = diffString(targetField, sourceField);
+      if (!differences) {
+        continue;
+      }
+
+      console.log(`${fieldFullName} differences\n${differences}`);
+
+      const shouldUpdate = await actionPrompt(
+        `Update ${fieldFullName} on ${targetFullName}?`,
+        "Update"
+      );
+
+      if (!shouldUpdate) {
+        continue;
+      }
+
+      changesMade = true;
+
+      targetField.disabled = sourceField.disabled;
+      targetField.items = sourceField.items;
+      targetField.linkType = sourceField.linkType;
+      targetField.localized = sourceField.localized;
+      targetField.name = sourceField.name;
+      targetField.omitted = sourceField.omitted;
+      targetField.required = sourceField.required;
+      targetField.type = sourceField.type;
+      targetField.validations = sourceField.validations;
     }
 
     if (changesMade) {
