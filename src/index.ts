@@ -1,9 +1,9 @@
 import { createClient } from "contentful-management";
-import figlet from "figlet";
 import prompts from "prompts";
-import { createMissingContentTypes } from "./actions/createMissingContentTypes";
+import { syncContentTypes } from "./syncContentTypes";
+import { printLogo } from "./utils/display";
 
-console.log(figlet.textSync("Space Jumper"));
+printLogo();
 
 const questions: prompts.PromptObject<string>[] = [
   {
@@ -25,5 +25,5 @@ const questions: prompts.PromptObject<string>[] = [
   });
 
   const spaces = (await client.getSpaces()).items;
-  await createMissingContentTypes(spaces);
+  await syncContentTypes(spaces);
 })();

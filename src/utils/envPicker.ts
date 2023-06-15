@@ -26,7 +26,7 @@ export const envPicker = async (spaces: Space[], type: "source" | "target") => {
     {
       type: "select",
       name: "environment",
-      message: "Which environment would you like to use as the target?",
+      message: `Which environment would you like to use as the ${type}?`,
       choices: environments.map(({ name, sys }) => ({
         title: name,
         value: sys.id,

@@ -1,3 +1,5 @@
+# Space Jumper
+
 ```txt
   ____                             _
  / ___| _ __   __ _  ___ ___      | |_   _ _ __ ___  _ __   ___ _ __
@@ -7,4 +9,11 @@
        |_|                                          |_|
 ```
 
-No longer struggle with copying Contentful content types between environments and spaces.
+Seamlessly clone your Contentful content types across spaces and environments, complete with full management and preview options - it's never been easier!
+
+## Features
+
+- Copy content types between environments and spaces
+- Sync your content types
+  - Adds missing fields
+  - Updates field properties (e.g. name, required, validation, etc)
