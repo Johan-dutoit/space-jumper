@@ -17,3 +17,12 @@ Seamlessly clone your Contentful content types across spaces and environments, c
 - Sync your content types
   - Adds missing fields
   - Updates field properties (e.g. name, required, validation, etc)
+
+## Usage
+
+Before you begin, you'll need a [Contentful Personal Access Token](https://www.contentful.com/developers/docs/references/authentication/#the-content-management-api).
+
+- Clone the repo
+- Run `npm install`
+- Run `npm start`
+- Follow prompts
