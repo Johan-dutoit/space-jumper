@@ -6,8 +6,7 @@
   "scripts": {
     "start": "npm run build && node dist/index.js",
     "build": "npx tsc",
-    "build:watch": "npx tsc -w",
-    "postinstall": "npx patch-package"
+    "build:watch": "npx tsc -w"
   },
   "author": "",
   "license": "ISC",
