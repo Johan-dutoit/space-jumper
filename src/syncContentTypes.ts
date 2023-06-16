@@ -20,6 +20,10 @@ export const syncContentTypes = async (spaces: Space[]) => {
     );
 
     if (targetContentType == null) {
+      printLogo();
+      printEnvironment(sourceFullName, targetFullName);
+      printKey();
+
       const shouldCreate = await actionPrompt(
         `Create ${sourceContentType.sys.id} on ${targetFullName}?`,
         "Create"
