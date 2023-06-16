@@ -25,7 +25,7 @@ export const syncContentTypes = async (spaces: Space[]) => {
       printKey();
 
       const shouldCreate = await actionPrompt(
-        `Create ${sourceContentType.sys.id} on ${targetFullName}?`,
+        `Create new Content Type {sourceContentType.sys.id} on ${targetFullName}?`,
         "Create"
       );
       if (!shouldCreate) {
@@ -58,7 +58,7 @@ export const syncContentTypes = async (spaces: Space[]) => {
 
       if (targetField == null) {
         const shouldCreate = await actionPrompt(
-          `Create ${sourceContentType.sys.id}.${sourceField.id} on ${targetFullName}?`,
+          `Create new Field ${sourceContentType.sys.id}.${sourceField.id} on ${targetFullName}?`,
           "Create"
         );
         if (!shouldCreate) {
@@ -78,7 +78,7 @@ export const syncContentTypes = async (spaces: Space[]) => {
       console.log(`${fieldFullName} differences\n${differences}`);
 
       const shouldUpdate = await actionPrompt(
-        `Update ${fieldFullName} on ${targetFullName}?`,
+        `Update Field ${fieldFullName} on ${targetFullName}?`,
         "Update"
       );
 
