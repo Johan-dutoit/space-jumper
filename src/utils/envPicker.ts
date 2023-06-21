@@ -43,5 +43,6 @@ export const envPicker = async (spaces: Space[], type: "source" | "target") => {
     ({ sys }) => sys.id === environmentResponse.environment
   )!;
 
-  return [space, environment] as const;
+  const editorInterfaces = (await environment.getEditorInterfaces()).items;
+  return [space, environment, editorInterfaces] as const;
 };
